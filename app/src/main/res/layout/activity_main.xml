@@ -94,21 +94,22 @@
       android:layout_marginHorizontal="10dp"
       android:background="@color/black" />
 
-    <LinearLayout
+    <ScrollView
+      android:id="@+id/sv_log_container"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_gravity="center_vertical"
       android:layout_marginHorizontal="20dp"
+      android:layout_marginBottom="200dp"
       android:layout_marginTop="20dp">
 
       <TextView
         android:id="@+id/tv_log"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="log: Empty"
         android:textSize="12dp" />
 
-    </LinearLayout>
+    </ScrollView>
   </LinearLayout>
 
 
@@ -118,7 +119,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="bottom"
     android:layout_marginHorizontal="20dp"
-    android:layout_marginBottom="40dp"
+    android:layout_marginBottom="30dp"
     android:orientation="vertical">
 
     <Button
@@ -153,8 +154,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="bottom"
-    android:layout_marginHorizontal="20dp"
-    android:layout_marginBottom="15dp"
+    android:layout_marginHorizontal="15dp"
+    android:layout_marginBottom="10dp"
     android:text="/data/user/0/package/files/mmkv"
     android:textSize="12dp" />
 

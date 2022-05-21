@@ -5,22 +5,28 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import com.luguangfeng.mymmkvdemo.io.IOMMKVImpl;
+import com.luguangfeng.mymmkvdemo.io.IOMyKVImpl;
+import com.luguangfeng.mymmkvdemo.io.IOSPImpl;
+import com.luguangfeng.mymmkvdemo.io.IReadWrite;
 import com.luguangfeng.mymmkvdemo.util.IMuteType;
 import com.tencent.mmkv.MMKV;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Objects;
 
 public class MainViewModel extends ViewModel {
     private final MutableLiveData<ArrayList<String>> mLogsLiveData = new MutableLiveData<>(new ArrayList<>());
     private final MutableLiveData<String> mRootDirLiveData = new MutableLiveData<>("");
     private final MutableLiveData<Integer> mMenuType = new MutableLiveData<>(0);
 
-    private MMKV mMMKV;
-    private SharedPreferences mSP;
+    private final HashMap<Integer, IReadWrite> mIOMap = new HashMap<>();
 
     public void init(Context context) {
         mRootDirLiveData.setValue(MMKV.initialize(context));
-        mMMKV = MMKV.defaultMMKV();
-        mSP = context.getSharedPreferences("MyMMKVTry_SP", Context.MODE_PRIVATE);
+        mIOMap.put(IMuteType.MENU_TYPE_SP, new IOSPImpl(context));
+        mIOMap.put(IMuteType.MENU_TYPE_MMKV, new IOMMKVImpl());
+        mIOMap.put(IMuteType.MENU_TYPE_MY_KV, new IOMyKVImpl());
     }
 
     public void setMenuType(@IMuteType int menuType) {
@@ -32,7 +38,7 @@ public class MainViewModel extends ViewModel {
         if (checkKVParamInvalid(key, "key") || checkKVParamInvalid(value, "value")) {
             return;
         }
-        mMMKV.encode(key, value);
+        Objects.requireNonNull(mIOMap.get(mMenuType.getValue())).writeKV(key, value);
         appendLogs("[handleBtnWriteClick] key:" + key + " value:" + value);
 
         handleBtnWriteTest1000Times();
@@ -42,7 +48,7 @@ public class MainViewModel extends ViewModel {
         if (checkKVParamInvalid(key, "key")) {
             return;
         }
-        String value = mMMKV.decodeString(key);
+        String value = Objects.requireNonNull(mIOMap.get(mMenuType.getValue())).readK(key);
         appendLogs("[handleBtnReadClick] key:" + key + " value:" + value);
     }
 
@@ -50,14 +56,8 @@ public class MainViewModel extends ViewModel {
         if (checkKVParamInvalid(key, "key")) {
             return;
         }
-        if (!mMMKV.containsKey(key)) {
-            appendLogs("[handleBtnDeleteClick] key not exists:" + key);
-        }
-        mMMKV.removeValueForKey(key);
+        Objects.requireNonNull(mIOMap.get(mMenuType.getValue())).deleteKey(key);
         appendLogs("[handleBtnDeleteClick] removeKey:" + key);
-        if (mMMKV.containsKey(key)) {
-            appendLogs("[handleBtnDeleteClick] key still exists:" + key);
-        }
     }
 
     private boolean checkKVParamInvalid(String param, String type) {
@@ -69,29 +69,12 @@ public class MainViewModel extends ViewModel {
     }
 
     // 测试写入 1000 次
-    private void handleBtnWriteTest1000Times() {
-        writeMMKV1000Times();
-        writeSP1000Times();
-    }
-
-    public void writeMMKV1000Times() {
-        long timeStart = System.nanoTime();
-        for (int i = 0; i < 1000; i++) {
-            mMMKV.putString("key_" + i, "value_" + i);
+    public void handleBtnWriteTest1000Times() {
+        for (IReadWrite io : mIOMap.values()) {
+            long time = io.write1000Times();
+            appendLogs("[handleBtnWriteTest1000Times] class:" + io.getClass().getName() +
+                    " timeConsume:" + time);
         }
-        long timeEnd = System.nanoTime();
-        appendLogs("[writeMMKV1000Times] consume ns:" + (timeEnd - timeStart));
-    }
-
-    public void writeSP1000Times() {
-        SharedPreferences.Editor editor = mSP.edit();
-        long timeStart = System.nanoTime();
-        for (int i = 0; i < 1000; i++) {
-            editor.putString("key_" + i, "value_" + i);
-            editor.commit();
-        }
-        long timeEnd = System.nanoTime();
-        appendLogs("[writeSP1000Times] consume ns:" + (timeEnd - timeStart));
     }
 
     // 实时行为记录

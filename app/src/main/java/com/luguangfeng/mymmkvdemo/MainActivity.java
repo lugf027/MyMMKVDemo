@@ -10,6 +10,7 @@ import android.view.View;
 import com.luguangfeng.mymmkvdemo.databinding.ActivityMainBinding;
 import com.luguangfeng.mymmkvdemo.util.IMuteType;
 import com.luguangfeng.mymmkvdemo.viewmodel.MainViewModel;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -40,16 +41,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initData() {
         mViewModel = new ViewModelProvider(this).get(MainViewModel.class);
         mViewModel.init(this);
-        mViewModel.getLogsLiveData().observe(this, logs -> {
-            StringBuilder sb = new StringBuilder();
-            for (String logStr : logs) {
-                sb.append(logStr).append("\n");
-            }
-            binding.tvLog.setText(sb.toString());
-        });
-        mViewModel.getRootDirLiveData().observe(this, rootDor -> {
-            binding.tvMmkvRootDir.setText(rootDor);
-        });
+        mViewModel.getLogsLiveData().observe(this, this::setUserLogs);
+        mViewModel.getRootDirLiveData().observe(this, binding.tvMmkvRootDir::setText);
+    }
+
+    private void setUserLogs(ArrayList<String> logs) {
+        StringBuilder sb = new StringBuilder();
+        for (String logStr : logs) {
+            sb.append(logStr).append("\n");
+        }
+        binding.tvLog.setText(sb.toString());
+        binding.svLogContainer.post(() -> binding.svLogContainer.fullScroll(View.FOCUS_DOWN));
     }
 
     @Override
@@ -60,6 +62,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.menu_test:
+                mViewModel.handleBtnWriteTest1000Times();
+                break;
             case R.id.menu_sp:
                 mViewModel.setMenuType(IMuteType.MENU_TYPE_SP);
                 break;
@@ -69,8 +74,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.menu_my_kv:
                 mViewModel.setMenuType(IMuteType.MENU_TYPE_MY_KV);
                 break;
-            default:
-                mViewModel.setMenuType(IMuteType.MENU_TYPE_TEST);
         }
         return super.onOptionsItemSelected(item);
     }

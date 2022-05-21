@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:orientation="vertical"
+  tools:context=".MainActivity">
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+      android:layout_width="match_parent"
+      android:layout_height="50dp"
+      android:layout_marginHorizontal="20dp">
+
+      <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|start"
+        android:text="启用MMKV"
+        android:textSize="20dp" />
+
+      <com.suke.widget.SwitchButton
+        android:id="@+id/switch_btn_use_mmkv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|end" />
+
+    </FrameLayout>
+
+    <View
+      android:layout_width="match_parent"
+      android:layout_height="0.5dp"
+      android:layout_marginHorizontal="10dp"
+      android:background="@color/black" />
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="50dp"
+      android:layout_marginHorizontal="20dp">
+
+      <TextView
+        android:layout_width="75dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|start"
+        android:text="Key："
+        android:textSize="20dp" />
+
+
+      <EditText
+        android:id="@+id/et_key"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom"
+        android:textSize="15dp" />
+
+    </LinearLayout>
+
+    <View
+      android:layout_width="match_parent"
+      android:layout_height="0.5dp"
+      android:layout_marginHorizontal="10dp"
+      android:background="@color/black" />
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="50dp"
+      android:layout_marginHorizontal="20dp">
+
+      <TextView
+        android:layout_width="75dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|start"
+        android:text="Value："
+        android:textSize="20dp" />
+
+
+      <EditText
+        android:id="@+id/et_value"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom"
+        android:textSize="15dp" />
+
+    </LinearLayout>
+
+    <View
+      android:layout_width="match_parent"
+      android:layout_height="0.5dp"
+      android:layout_marginHorizontal="10dp"
+      android:background="@color/black" />
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_vertical"
+      android:layout_marginHorizontal="20dp"
+      android:layout_marginTop="20dp">
+
+      <TextView
+        android:id="@+id/tv_log"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="log: Empty"
+        android:textSize="12dp" />
+
+    </LinearLayout>
+  </LinearLayout>
+
+
+  <!-- 底部操作按钮 -->
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    android:layout_marginHorizontal="20dp"
+    android:layout_marginBottom="40dp"
+    android:orientation="vertical">
+
+    <Button
+      android:id="@+id/btn_write"
+      android:layout_width="match_parent"
+      android:layout_height="45dp"
+      android:layout_marginHorizontal="30dp"
+      android:layout_marginVertical="5dp"
+      android:text="写入" />
+
+    <Button
+      android:id="@+id/btn_read"
+      android:layout_width="match_parent"
+      android:layout_height="45dp"
+      android:layout_marginHorizontal="30dp"
+      android:layout_marginVertical="5dp"
+      android:text="读取" />
+
+
+    <Button
+      android:id="@+id/btn_delete"
+      android:layout_width="match_parent"
+      android:layout_height="45dp"
+      android:layout_marginHorizontal="30dp"
+      android:layout_marginVertical="5dp"
+      android:text="删除" />
+
+  </LinearLayout>
+
+  <TextView
+    android:id="@+id/tv_mmkv_root_dir"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    android:layout_marginHorizontal="20dp"
+    android:layout_marginBottom="15dp"
+    android:text="/data/user/0/package/files/mmkv"
+    android:textSize="12dp" />
+
+</FrameLayout>

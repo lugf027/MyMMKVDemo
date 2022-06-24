@@ -72,8 +72,8 @@ public class MainViewModel extends ViewModel {
     public void handleBtnWriteTest1000Times() {
         for (IReadWrite io : mIOMap.values()) {
             long time = io.write1000Times();
-            appendLogs("[handleBtnWriteTest1000Times] class:" + io.getClass().getName() +
-                    " timeConsume:" + time);
+            appendLogs("[testWrite1000Times] class:" + io.getClass().getSimpleName() +
+                    " time: " + time / 1000 + " ms");
         }
     }
 

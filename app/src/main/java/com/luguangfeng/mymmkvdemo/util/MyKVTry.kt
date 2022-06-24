@@ -1,6 +1,16 @@
 package com.luguangfeng.mymmkvdemo.util
 
+import android.content.Context
+
 object MyKVTry {
+    @JvmStatic
+    fun initIOFile(context: Context) {
+        initIOFilePath(context.filesDir.absolutePath + "/my_kv")
+    }
+
+    @JvmStatic
+    private external fun initIOFilePath(filePath: String)
+
     @JvmStatic
     external fun stringFromJNI() : String
 
